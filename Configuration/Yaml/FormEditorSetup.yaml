@@ -1,0 +1,16 @@
+TYPO3:
+  CMS:
+    Form:
+      mixins:
+        formElementMixins:
+          SelectionMixin:
+            formEditor:
+              predefinedDefaults:
+                properties:
+                  options: []
+              editors:
+                310:
+                  identifier: 'options_import'
+                  templateName: 'Inspector-TextareaEditor'
+                  label: Import CSV (; separated)
+                  propertyPath: 'properties.options_import'

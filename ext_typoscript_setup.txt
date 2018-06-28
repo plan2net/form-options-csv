@@ -1,0 +1,7 @@
+module.tx_form {
+    settings {
+        yamlConfigurations {
+            910 = EXT:form_options_csv/Configuration/Yaml/FormEditorSetup.yaml
+        }
+    }
+}
