@@ -14,3 +14,9 @@ TYPO3:
                   templateName: 'Inspector-TextareaEditor'
                   label: Import CSV (; separated)
                   propertyPath: 'properties.options_import'
+      prototypes:
+        standard:
+          formEditor:
+            formEditorFluidConfiguration:
+              partialRootPaths:
+                310: 'EXT:form_options_csv/Resources/Private/Backend/Partials/FormEditor/'
