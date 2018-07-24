@@ -47,8 +47,11 @@ class ImportSelectOptions
     protected function parseElements($elements): array
     {
         foreach ($elements as $key => $element) {
-            if (($element['type'] === 'MultiSelect' || $element['type'] === 'SingleSelect')
-                && !empty($element['properties']['options_import'])) {
+            if (!empty($element['properties']['options_import']
+                && ($element['type'] === 'MultiSelect'
+                    || $element['type'] === 'SingleSelect'
+                    || $element['type'] === 'MultiCheckbox'
+                    || $element['type'] === 'RadioButton'))) {
                 $elements[$key] = $this->importOptions($element);
             }
         }
@@ -78,7 +81,8 @@ class ImportSelectOptions
                             (string)$parts[1] => $parts[0]
                         ];
                         if ((bool)$parts[2] === true) {
-                            if ($element['type'] === 'SingleSelect') {
+                            if ($element['type'] === 'SingleSelect'
+                                || $element['type'] === 'RadioButton') {
                                 if (!$defaultValueSet) {
                                     $element['defaultValue'] = $parts[1];
                                     $defaultValueSet = true;
