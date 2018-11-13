@@ -2,7 +2,7 @@
   "name": "plan2net/form-options-csv",
   "description": "Import CSV data for Core form extension select options",
   "require": {
-    "typo3/cms-core": ">=8.7.0,<=8.7.99",
+    "typo3/cms-core": "^8.7 || ^9.5",
     "typo3/cms-form": "*"
   },
   "type": "typo3-cms-extension",
