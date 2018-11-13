@@ -63,16 +63,17 @@ class ImportSelectOptions
      * @param array $element
      * @return array
      */
-    protected function importOptions($element): array {
+    protected function importOptions($element): array
+    {
         // clear set options
         $element['properties']['options'] = [];
         $element['defaultValue'] = [];
         $defaultValueSet = false;
         foreach (explode("\n", $element['properties']['options_import']) as $line) {
             if (trim($line)) {
-                // label, value, selected
                 $parts = str_getcsv($line, ';');
                 switch (\count($parts)) {
+                    // full definition of <label>;<value>;<0|1> (set as default value)
                     case 3:
                         if (trim($parts[1]) === '') {
                             $parts[1] = $parts[0];
@@ -92,11 +93,13 @@ class ImportSelectOptions
                             }
                         }
                         break;
+                    // only <label>;<value> given, no default option
                     case 2:
                         $element['properties']['options'] += [
                             (string)$parts[1] => $parts[0]
                         ];
                         break;
+                    // only <label> given, set <value> to value of <label>
                     default:
                         $element['properties']['options'] += [
                             (string)$parts[0] => $parts[0]

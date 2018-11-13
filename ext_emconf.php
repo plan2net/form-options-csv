@@ -2,11 +2,11 @@
 
 $EM_CONF[$_EXTKEY] = array(
     'title' => 'Form options CSV import',
-    'description' => 'Import CSV data for Core form extension select options',
+    'description' => 'Import CSV data for core form extension select options',
     'category' => 'backend',
     'author' => 'Wolfgang Klinger',
     'author_email' => 'wk@plan2.net',
-    'dependencies' => 'cms',
+    'dependencies' => '',
     'conflicts' => '',
     'priority' => '',
     'module' => '',
@@ -18,10 +18,10 @@ $EM_CONF[$_EXTKEY] = array(
     'clearCacheOnLoad' => 1,
     'lockType' => '',
     'author_company' => 'plan2net GmbH',
-    'version' => '1.1.0',
+    'version' => '1.2.0',
     'constraints' => array(
         'depends' => array(
-            'typo3' => '8.7.0-8.7.99',
+            'typo3' => '8.7.19-9.5.99',
             'form' => '*',
         ),
         'conflicts' => array(
