@@ -1,0 +1,16 @@
+TYPO3:
+  CMS:
+    Form:
+      prototypes:
+        standard:
+          formElementsDefinition:
+            MultiCheckbox:
+              formEditor:
+                editors:
+                  207:
+                    identifier: name
+                    templateName: Inspector-TextEditor
+                    label: Name
+                    propertyPath: properties.fluidAdditionalAttributes.name
+                    propertyValidators:
+                      10: NotEmpty
