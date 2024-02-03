@@ -1,14 +1,19 @@
 {
-  "name": "plan2net/form-options-csv",
-  "description": "Import CSV data for Core form extension select options",
-  "require": {
-    "typo3/cms-core": "^8.7 || ^9.5",
-    "typo3/cms-form": "*"
+  "name" : "plan2net/form-options-csv",
+  "description" : "Import CSV data for Core form extension select options",
+  "require" : {
+    "typo3/cms-core" : "^11.5",
+    "typo3/cms-form" : "^11.5"
   },
-  "type": "typo3-cms-extension",
-  "autoload": {
-    "psr-4": {
-      "Plan2net\\FormOptionsCsv\\": "Classes"
+  "type" : "typo3-cms-extension",
+  "autoload" : {
+    "psr-4" : {
+      "Plan2net\\FormOptionsCsv\\" : "Classes"
+    }
+  },
+  "extra" : {
+    "typo3/cms" : {
+      "extension-key" : "form_options_csv"
     }
   }
 }

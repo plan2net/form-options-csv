@@ -3,32 +3,19 @@ declare(strict_types=1);
 
 namespace Plan2net\FormOptionsCsv\Hooks;
 
-/**
- * Class ImportSelectOptions
- * @package Plan2net\FormOptionsCsv\Hooks
- * @author Wolfgang Klinger <wk@plan2.net>
- */
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+
 class ImportSelectOptions
 {
 
-    /**
-     * @param string $formPersistenceIdentifier
-     * @param array $formDefinition
-     * @return array
-     */
     public function beforeFormSave(string $formPersistenceIdentifier, array $formDefinition): array
     {
         if (\is_array($formDefinition['renderables'])) {
             $formDefinition['renderables'] = $this->parsePages($formDefinition['renderables']);
         }
-
         return $formDefinition;
     }
 
-    /**
-     * @param array $pages
-     * @return array
-     */
     protected function parsePages(array $pages): array
     {
         foreach ($pages as $key => $page) {
@@ -40,18 +27,11 @@ class ImportSelectOptions
         return $pages;
     }
 
-    /**
-     * @param array $elements
-     * @return array
-     */
     protected function parseElements($elements): array
     {
         foreach ($elements as $key => $element) {
             if (!empty($element['properties']['options_import']
-                && ($element['type'] === 'MultiSelect'
-                    || $element['type'] === 'SingleSelect'
-                    || $element['type'] === 'MultiCheckbox'
-                    || $element['type'] === 'RadioButton'))) {
+                && in_array($element['type'], ['MultiSelect', 'SingleSelect', 'MultiCheckbox', 'RadioButton'], true))) {
                 $elements[$key] = $this->importOptions($element);
             }
         }
@@ -59,11 +39,7 @@ class ImportSelectOptions
         return $elements;
     }
 
-    /**
-     * @param array $element
-     * @return array
-     */
-    protected function importOptions($element): array
+    protected function importOptions(array $element): array
     {
         // clear set options
         $element['properties']['options'] = [];
