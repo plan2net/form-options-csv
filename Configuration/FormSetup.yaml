@@ -1,0 +1,74 @@
+TYPO3:
+  CMS:
+    Form:
+      prototypes:
+        standard:
+          formElementsDefinition:
+            MultiCheckbox:
+              formEditor:
+                formEditorFluidConfiguration:
+                  partialRootPaths:
+                    310: 'EXT:form_options_csv/Resources/Private/Backend/Partials/FormEditor/'
+                predefinedDefaults:
+                  properties:
+                    options: [ ]
+                editors:
+                  300:
+                    propertyValidators:
+                      10: null
+                  310:
+                    identifier: 'options_import'
+                    templateName: 'Inspector-TextareaEditor'
+                    label: Import CSV (; separated)
+                    propertyPath: 'properties.options_import'
+            MultiSelect:
+              formEditor:
+                formEditorFluidConfiguration:
+                  partialRootPaths:
+                    310: 'EXT:form_options_csv/Resources/Private/Backend/Partials/FormEditor/'
+                predefinedDefaults:
+                  properties:
+                    options: [ ]
+                editors:
+                  300:
+                    propertyValidators:
+                      10: null
+                  310:
+                    identifier: 'options_import'
+                    templateName: 'Inspector-TextareaEditor'
+                    label: Import CSV (; separated)
+                    propertyPath: 'properties.options_import'
+            SingleSelect:
+              formEditor:
+                formEditorFluidConfiguration:
+                  partialRootPaths:
+                    310: 'EXT:form_options_csv/Resources/Private/Backend/Partials/FormEditor/'
+                predefinedDefaults:
+                  properties:
+                    options: [ ]
+                editors:
+                  300:
+                    propertyValidators:
+                      10: null
+                  310:
+                    identifier: 'options_import'
+                    templateName: 'Inspector-TextareaEditor'
+                    label: Import CSV (; separated)
+                    propertyPath: 'properties.options_import'
+            RadioButton:
+              formEditor:
+                formEditorFluidConfiguration:
+                  partialRootPaths:
+                    310: 'EXT:form_options_csv/Resources/Private/Backend/Partials/FormEditor/'
+                predefinedDefaults:
+                  properties:
+                    options: [ ]
+                editors:
+                  300:
+                    propertyValidators:
+                      10: null
+                  310:
+                    identifier: 'options_import'
+                    templateName: 'Inspector-TextareaEditor'
+                    label: Import CSV (; separated)
+                    propertyPath: 'properties.options_import'

@@ -1,16 +1,5 @@
 # Import CSV data for form select options
 
-## Important information
-
-There's currently a core bug in `ArrayUtility` which makes an implicit type cast
-and therefor no integer or float values are possible as checked/selected default values.
-See <https://forge.typo3.org/issues/86938> for more information.
-
-So the examples below are only correct after this bug is fixed.
-
-The current result would be that only "Level 4" will get checked/selected as default,
-because it has a string as _value_.
-
 ## What does it do?
 
 The extension adds a new field to the following elements:
@@ -18,6 +7,7 @@ The extension adds a new field to the following elements:
 * Single select
 * Multi select
 * Multi checkbox
+* Radio button
 
 (all elements where there's a _Choices_ field)
 
@@ -54,4 +44,8 @@ and activate the extension through the Extension manager.
 The import field is cleared after the form element is saved.
 
 For single select values only the first entry with a selected option is set and ignored for all other entries.
+
+## Known issues
+
+* Doesn't work within fieldset (yet)
 
