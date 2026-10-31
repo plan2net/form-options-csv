@@ -7,7 +7,12 @@ prototypes:
     formEditor:
       dynamicJavaScriptModules:
         additionalViewModelModules:
-          1604589938: '@plan2net/form-options-csv/options-import-editor.js'
+          1604589938: '@plan2net/form-options-csv/options-import.js'
+      formEditorFluidConfiguration:
+        partialRootPaths:
+          1604589938: 'EXT:form_options_csv/Resources/Private/Backend/Partials/FormEditor/'
+      formEditorPartials:
+        Inspector-OptionsImportEditor: Inspector/OptionsImportEditor
     formElementsDefinition:
       SingleSelect: &optionsImport
         formEditor:
@@ -19,10 +24,9 @@ prototypes:
               propertyValidators:
                 10: null
             310:
-              identifier: options_import
-              templateName: Inspector-TextareaEditor
-              label: 'Import CSV (; or tab separated)'
-              propertyPath: properties.options_import
+              identifier: optionsImport
+              templateName: Inspector-OptionsImportEditor
+              label: 'Import from spreadsheet/CSV…'
       MultiSelect: *optionsImport
       MultiCheckbox: *optionsImport
       RadioButton: *optionsImport
