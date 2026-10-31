@@ -2,59 +2,74 @@
 
 ## What does it do?
 
-The extension adds a new field to the following elements:
+The extension adds an import field to these form elements:
 
 * Single select
 * Multi select
 * Multi checkbox
 * Radio button
 
-(all elements where there's a _Choices_ field)
+These are all elements with a _Choices_ field.
 
 ![Backend form](Documentation/Images/backend_form_import.png)
 
-You can insert CSV data (see below for possible format and options) in this field. If you save the element, the CSV data is imported as _Choices_ rows.
+Paste your options into the import field and save the element. Each line becomes one _Choices_ row. The example data below gives this result:
 
 ![Backend form after import](Documentation/Images/backend_form_imported.png)
 
- (see below for the given data for this result)
+**The import replaces all existing options of the element.** After saving, the import field is empty again.
 
 ## Supported versions
 
 | Extension | TYPO3                | PHP        |
 |-----------|----------------------|------------|
 | 3.x       | 12.4, 13.4, 14.3 LTS | 8.2 to 8.5 |
-| 2.x       | 11.5                 |            |
 
-Only the LTS lines listed are tested and supported.
+Only these LTS versions are tested and supported. For TYPO3 11.5, use version 2.x.
 
 ## Installation
 
-Require via composer
-
     composer require "plan2net/form-options-csv"
 
-## Possible values in the import field
+## Format of the import field
 
-    1: Label 1;1;1
-    2: Label 2;2
-    3: Label 3
-    4: Label 4;;1
-    5: "Label with ; works too";5;1
-    
-1. Label is set to 'Label 1', value is set to '1' and the option is selected as default
-2. Label is set to 'Label 2', value is set to '2'
-3. Label _and_ value are set to 'Label 3'
-4. Label _and_ value are set to 'Label 4' and the option is set as default
-5. Escape the label with `""` (CSV standard) and you can use `;` in the text too
+Each line has up to three columns, separated by `;`:
 
-The import field is cleared after the form element is saved.
+    label;value;default
 
-For single select and radio button values only the first entry with a selected option is set and ignored for all other entries.
+* **label**: the text the visitor sees. Required.
+* **value**: the value that is submitted. Optional. If it is missing or empty, the label is used.
+* **default**: marks the option as selected by default. Leave it empty or use `0` for "no". Anything else means "yes".
 
-Columns after the third are ignored.
+Columns after the third are ignored. Empty lines are skipped.
 
-You can also copy rows from a spreadsheet (Excel, LibreOffice, Google Sheets, Numbers) and paste them. Pasted cells are separated by tabs, and the import handles that. If a line has a tab, the tab separates the columns and `;` is just text.
+### Example
+
+    Label 1;1;1
+    Label 2;2
+    Label 3
+    Label 4;;1
+    "Label with ; works too";5;1
+
+* `Label 1;1;1`: label "Label 1", value "1", selected by default.
+* `Label 2;2`: label "Label 2", value "2".
+* `Label 3`: label and value are "Label 3".
+* `Label 4;;1`: label and value are "Label 4", selected by default.
+* `"Label with ; works too";5;1`: put a label in double quotes (`""`) to use `;` inside it.
+
+### Default values
+
+* Single select and radio button can have only one default. The first marked line wins, and later marks are ignored.
+* Multi select and multi checkbox keep every marked line as a default.
+
+### Same value twice
+
+If two lines have the same value, only the first line is kept.
+
+### Paste from a spreadsheet
+
+You can copy rows from a spreadsheet (Excel, LibreOffice, Google Sheets, Numbers) and paste them. Pasted cells are separated by tabs, and the import handles that. If a line has a tab, the tab separates the columns and `;` is just text.
+
+### Fieldsets and grids
 
 The import works for elements at any depth, including fieldsets and grid rows.
-
