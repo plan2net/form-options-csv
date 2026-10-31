@@ -6,6 +6,13 @@ test('a UTF-8 file loses its byte order mark', () => {
   assert.equal(decodeFile(new Uint8Array([0xef, 0xbb, 0xbf, 0xc3, 0x84, 0x3b, 0x31])), 'Ä;1');
 });
 
+test('a UTF-16 file from Excel "Unicode Text" is read', () => {
+  const littleEndian = new Uint8Array([0xff, 0xfe, 0xc4, 0x00, 0x09, 0x00, 0x31, 0x00]);
+  const bigEndian = new Uint8Array([0xfe, 0xff, 0x00, 0xc4, 0x00, 0x09, 0x00, 0x31]);
+  assert.equal(decodeFile(littleEndian), 'Ä\t1');
+  assert.equal(decodeFile(bigEndian), 'Ä\t1');
+});
+
 test('a file with only a byte order mark is empty', () => {
   assert.equal(decodeFile(new Uint8Array([0xef, 0xbb, 0xbf]).buffer), '');
 });

@@ -54,7 +54,7 @@ Switch on **First row is a header** if your sheet has a header row. The modal re
 * **Pasted cells** from a spreadsheet are separated by tabs. Pasted text without tabs is split on `;`. Commas never split pasted text, so labels like "Vienna, Austria" work.
 * **CSV files** may use tab, `;` or `,`. The import looks at the first row and uses the separator that appears most often.
 * Put a label in double quotes (`"Label with ; works too"`) to use the separator inside it.
-* Files may be saved as UTF-8 or in the older Windows encoding of Excel. Both work.
+* Files may be saved as UTF-8, as UTF-16 ("Unicode Text" in Excel) or in the older Windows encoding of Excel. All three work.
 * Excel workbooks (`.xlsx`) cannot be imported directly. Copy the cells or save the sheet as CSV.
 
 ## Example
