@@ -4,6 +4,10 @@ priority: 200
 
 prototypes:
   standard:
+    formEditor:
+      dynamicJavaScriptModules:
+        additionalViewModelModules:
+          1604589938: '@plan2net/form-options-csv/options-import-editor.js'
     formElementsDefinition:
       SingleSelect: &optionsImport
         formEditor:
@@ -17,7 +21,7 @@ prototypes:
             310:
               identifier: options_import
               templateName: Inspector-TextareaEditor
-              label: 'Import CSV (; separated)'
+              label: 'Import CSV (; or tab separated)'
               propertyPath: properties.options_import
       MultiSelect: *optionsImport
       MultiCheckbox: *optionsImport

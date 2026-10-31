@@ -7,8 +7,6 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 (static function (): void {
-    $GLOBALS['TYPO3_CONF_VARS']['BE']['stylesheets']['form_options_csv'] = 'EXT:form_options_csv/Resources/Public/Backend/css/';
-
     $typo3Version = (new Typo3Version())->getVersion();
     if (version_compare($typo3Version, '14.0.0', '<')) {
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['beforeFormSave'][] = BeforeFormSaveHook::class;
