@@ -34,6 +34,10 @@ prototypes:
                 columnDefault: 'Default'
                 addOne: 'Add 1 option'
                 addMany: 'Add %d options'
+                replaceOne: 'Replace with 1 option'
+                replaceMany: 'Replace with %d options'
+                hasHeader: 'First row is a header'
+                replace: 'Replace existing options'
       MultiSelect: *optionsImport
       MultiCheckbox: *optionsImport
       RadioButton: *optionsImport

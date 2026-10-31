@@ -110,6 +110,24 @@ test('applying adds the rows below the existing option and they are saved with t
   expect(yaml).toContain('defaultValue: 1');
 });
 
+test('the header switch drops the first row from the preview', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, 'Label\tValue\nVienna\tvie');
+  await expect(modal.locator('tbody tr')).toHaveCount(2);
+  await modal.getByLabel('First row is a header').check();
+  await expect(modal.locator('tbody tr')).toHaveCount(1);
+  await expect(modal.locator('tbody tr').first().locator('td').first()).toHaveText('Vienna');
+});
+
+test('the replace switch removes the existing options', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, 'Vienna\tvie');
+  await modal.getByLabel('Replace existing options').check();
+  await modal.getByRole('button', { name: 'Replace with 1 option' }).click();
+  await expect.poll(() => inputValues(page)).toContain('Vienna');
+  expect(await inputValues(page)).not.toContain('Existing option');
+});
+
 test('the editor undo button removes the whole import in one step', async ({ page }) => {
   const modal = await openImport(page);
   await paste(modal, readmeExample);
