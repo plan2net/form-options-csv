@@ -2,7 +2,7 @@ import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { expect, test, type FrameLocator, type Locator, type Page } from '@playwright/test';
 
-const formFile = '.Build/v14/public/fileadmin/form_definitions/contact.form.yaml';
+const formFile = `.Build/v${process.env.TYPO3_VERSION ?? '14'}/public/fileadmin/form_definitions/contact.form.yaml`;
 
 function editor(page: Page): FrameLocator {
   return page.frameLocator('#typo3-contentIframe');
@@ -20,7 +20,10 @@ test.beforeEach(async ({ page }) => {
   await page.locator('#t3-username').fill('admin');
   await page.locator('#t3-password').fill('Password-1234!');
   await page.locator('#t3-login-submit').click();
-  await page.locator('a[href*="/typo3/module/form?"]').first().click();
+  await page.getByRole('menuitem', { name: 'Forms', exact: true })
+    .or(page.getByRole('link', { name: 'Forms', exact: true }))
+    .first()
+    .click();
   await editor(page).locator('a[title="Edit this form"]').first().click();
 });
 

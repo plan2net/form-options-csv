@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+## Description: Serve the TYPO3 test site for one version and run the Playwright end-to-end tests against it
+## Usage: e2e [12|13|14] [playwright arguments]
+## Example: ddev e2e 13
+
+set -euo pipefail
+cd "$DDEV_APPROOT"
+
+version="${1:-14}"
+shift || true
+site=".Build/v$version"
+
+if [ ! -d "$site" ]; then
+    echo "No test site for TYPO3 $version. Run: ddev e2e-setup $version" >&2
+    exit 1
+fi
+
+if [ -d public ] && [ ! -L public ]; then
+    rmdir public || { echo "public/ is a real folder with content. Move it away first." >&2; exit 1; }
+fi
+ln -sfn "$site/public" public
+# PHP caches resolved paths, so without a reload it keeps serving the previous site.
+sudo kill -USR2 "$(pgrep -o php-fpm)"
+curl -fsS --retry 20 --retry-connrefused --retry-all-errors --retry-delay 1 -o /dev/null http://localhost/typo3/
+
+TYPO3_VERSION="$version" npx playwright test --reporter=list "$@"
