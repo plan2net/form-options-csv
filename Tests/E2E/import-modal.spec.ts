@@ -36,3 +36,11 @@ test('the settings of a select show the import button instead of a textarea', as
   await expect(editor(page).getByRole('button', { name: 'Import from spreadsheet/CSV…' })).toBeVisible();
   await expect(editor(page).locator('textarea')).toHaveCount(0);
 });
+
+test('the import button opens a modal with a paste area', async ({ page }) => {
+  await selectTopic(page);
+  await editor(page).getByRole('button', { name: 'Import from spreadsheet/CSV…' }).click();
+  const modal = page.getByRole('dialog');
+  await expect(modal).toBeVisible();
+  await expect(modal.getByText('Paste cells here (Ctrl+V / ⌘V), drop a CSV file, or click to choose a file')).toBeVisible();
+});

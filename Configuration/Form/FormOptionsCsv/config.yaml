@@ -27,6 +27,8 @@ prototypes:
               identifier: optionsImport
               templateName: Inspector-OptionsImportEditor
               label: 'Import from spreadsheet/CSV…'
+              labels:
+                dropArea: 'Paste cells here (Ctrl+V / ⌘V), drop a CSV file, or click to choose a file'
       MultiSelect: *optionsImport
       MultiCheckbox: *optionsImport
       RadioButton: *optionsImport
