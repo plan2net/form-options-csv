@@ -2,7 +2,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Form options CSV import',
-    'description' => 'Import CSV data for core form extension select options',
+    'description' => 'Import options for TYPO3 form select fields from a spreadsheet or CSV file',
     'category' => 'backend',
     'author' => 'Wolfgang Klinger',
     'author_email' => 'wk@plan2.net',

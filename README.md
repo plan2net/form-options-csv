@@ -1,8 +1,8 @@
-# Import CSV data for form select options
+# Import form select options from a spreadsheet or CSV file
 
 ## What does it do?
 
-The extension adds an import field to these form elements:
+The extension adds an **Import from spreadsheet/CSV…** button to these form elements in the TYPO3 form editor:
 
 * Single select
 * Multi select
@@ -11,13 +11,13 @@ The extension adds an import field to these form elements:
 
 These are all elements with a _Choices_ field.
 
-![Backend form](Documentation/Images/backend_form_import.png)
+Click the button, then paste cells copied from Excel, Google Sheets, LibreOffice or Numbers, or drop a CSV file. A preview shows every row before anything changes:
 
-Paste your options into the import field and save the element. Each line becomes one _Choices_ row. The example data below gives this result:
+![Import modal with preview](Documentation/Images/backend_form_import.png)
 
-![Backend form after import](Documentation/Images/backend_form_imported.png)
+Click **Add N options**. The rows appear in _Choices_ right away, no save needed. Save the form as usual. The undo button of the form editor removes the whole import in one step.
 
-**The import replaces all existing options of the element.** After saving, the import field is empty again.
+![Choices after the import](Documentation/Images/backend_form_imported.png)
 
 ## Supported versions
 
@@ -31,19 +31,33 @@ Only these LTS versions are tested and supported. For TYPO3 11.5, use version 2.
 
     composer require "plan2net/form-options-csv"
 
-## Format of the import field
+## Columns
 
-Each line has up to three columns, separated by `;`:
+Each row has up to three columns:
 
-    label;value;default
+    label | value | default
 
-* **label**: the text the visitor sees. Required.
-* **value**: the value that is submitted. Optional. If it is missing or empty, the label is used.
+* **label**: the text the visitor sees. Required. Rows without a label are skipped.
+* **value**: the value that is submitted. Optional. If it is empty, the label is used.
 * **default**: marks the option as selected by default. Leave it empty or use `0` for "no". Anything else means "yes".
 
-Columns after the third are ignored. Empty lines are skipped.
+Columns after the third are ignored. Empty rows are skipped.
 
-### Example
+## Adding or replacing
+
+Imported options are **added below** the existing options. Switch on **Replace existing options** to remove the existing options first. This switch always starts off.
+
+Switch on **First row is a header** if your sheet has a header row. The modal remembers this switch.
+
+## Separators
+
+* **Pasted cells** from a spreadsheet are separated by tabs. Pasted text without tabs is split on `;`. Commas never split pasted text, so labels like "Vienna, Austria" work.
+* **CSV files** may use tab, `;` or `,`. The import looks at the first row and uses the separator that appears most often.
+* Put a label in double quotes (`"Label with ; works too"`) to use the separator inside it.
+* Files may be saved as UTF-8 or in the older Windows encoding of Excel. Both work.
+* Excel workbooks (`.xlsx`) cannot be imported directly. Copy the cells or save the sheet as CSV.
+
+## Example
 
     Label 1;1;1
     Label 2;2
@@ -54,22 +68,12 @@ Columns after the third are ignored. Empty lines are skipped.
 * `Label 1;1;1`: label "Label 1", value "1", selected by default.
 * `Label 2;2`: label "Label 2", value "2".
 * `Label 3`: label and value are "Label 3".
-* `Label 4;;1`: label and value are "Label 4", selected by default.
-* `"Label with ; works too";5;1`: put a label in double quotes (`""`) to use `;` inside it.
+* `Label 4;;1`: label and value are "Label 4", marked as default.
+* `"Label with ; works too";5;1`: label "Label with ; works too", value "5", marked as default.
 
-### Default values
+## Rules
 
-* Single select and radio button can have only one default. The first marked line wins, and later marks are ignored.
-* Multi select and multi checkbox keep every marked line as a default.
-
-### Same value twice
-
-If two lines have the same value, only the first line is kept.
-
-### Paste from a spreadsheet
-
-You can copy rows from a spreadsheet (Excel, LibreOffice, Google Sheets, Numbers) and paste them. Pasted cells are separated by tabs, and the import handles that. If a line has a tab, the tab separates the columns and `;` is just text.
-
-### Fieldsets and grids
-
-The import works for elements at any depth, including fieldsets and grid rows.
+* **Same value twice:** a row whose value already exists, or appears earlier in the import, is skipped. The preview says why.
+* **Defaults on single select and radio button:** only one default is allowed. The first marked row becomes the default and replaces the old one. Later marks are dropped, and the preview says so.
+* **Defaults on multi select and multi checkbox:** every marked row becomes a default, in addition to the existing ones.
+* **Broken quotes:** if a quote is not closed, nothing is imported and the preview names the line.
