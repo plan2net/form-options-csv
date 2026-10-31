@@ -1,6 +1,8 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
+    "test": "node --test 'Tests/JavaScript/**/*.test.js'",
     "test:e2e": "playwright test --reporter=list"
   },
   "devDependencies": {
