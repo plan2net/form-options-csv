@@ -129,6 +129,36 @@ test('an unclosed quote blocks the import and names the line', async ({ page }) 
   await expect(modal.getByRole('button', { name: 'Add 0 options' })).toBeDisabled();
 });
 
+test('a chosen comma separated file in the old Windows encoding is imported', async ({ page }) => {
+  const modal = await openImport(page);
+  await modal.locator('input[type="file"]').setInputFiles({
+    name: 'cities.csv',
+    mimeType: 'application/vnd.ms-excel',
+    buffer: Buffer.from('"Graz, Österreich",grz,1\r\nWien,wie\r\n', 'latin1'),
+  });
+  const rows = modal.locator('tbody tr');
+  await expect(rows).toHaveCount(2);
+  await expect(rows.nth(0).locator('td')).toHaveText(['Graz, Österreich', 'grz', '✔', '']);
+});
+
+test('a dropped UTF-8 file with a byte order mark is imported', async ({ page }) => {
+  const modal = await openImport(page);
+  await modal.locator('.form-options-csv-drop-area').evaluate(dropArea => {
+    const dataTransfer = new DataTransfer();
+    const bytes = new Uint8Array([0xef, 0xbb, 0xbf, ...new TextEncoder().encode('Zürich;zrh\n')]);
+    dataTransfer.items.add(new File([bytes], 'cities.csv', { type: 'text/csv' }));
+    dropArea.dispatchEvent(new DragEvent('drop', { dataTransfer, bubbles: true, cancelable: true }));
+  });
+  await expect(modal.locator('tbody tr').first().locator('td').first()).toHaveText('Zürich');
+});
+
+test('an Excel workbook gets a hint instead of a preview', async ({ page }) => {
+  const modal = await openImport(page);
+  await modal.locator('input[type="file"]').setInputFiles({ name: 'cities.xlsx', mimeType: '', buffer: Buffer.from('PK') });
+  await expect(modal.getByText('This is a spreadsheet file. Copy the cells or save the sheet as CSV.')).toBeVisible();
+  await expect(modal.locator('tbody tr')).toHaveCount(0);
+});
+
 test('the header switch drops the first row from the preview', async ({ page }) => {
   const modal = await openImport(page);
   await paste(modal, 'Label\tValue\nVienna\tvie');

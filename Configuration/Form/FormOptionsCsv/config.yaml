@@ -43,6 +43,7 @@ prototypes:
                 valueRepeated: 'Value appears twice, skipped'
                 onlyOneDefault: 'Only one default allowed, added without default mark'
                 unclosedQuote: 'Line %d: a quote is not closed'
+                spreadsheetFile: 'This is a spreadsheet file. Copy the cells or save the sheet as CSV.'
       MultiSelect: *optionsImport
       MultiCheckbox: *optionsImport
       RadioButton: *optionsImport

@@ -1,7 +1,8 @@
 import { html, LitElement } from 'lit';
-import { parseRows, planImport } from './csv.js';
+import { decodeFile, parseRows, planImport } from './csv.js';
 
 const settingsKey = 'form-options-csv:settings';
+const spreadsheetExtensions = ['xlsx', 'xls', 'ods', 'numbers'];
 
 export class OptionsImportElement extends LitElement {
   static properties = {
@@ -12,6 +13,7 @@ export class OptionsImportElement extends LitElement {
     source: { state: true },
     hasHeader: { state: true },
     replace: { state: true },
+    spreadsheetFile: { state: true },
   };
 
   constructor() {
@@ -29,7 +31,13 @@ export class OptionsImportElement extends LitElement {
     const { plan, error } = this.parse();
     const importedCount = plan?.importedCount ?? 0;
     return html`
-      <div class="form-options-csv-drop-area" tabindex="0">${this.labels.dropArea}</div>
+      <div class="form-options-csv-drop-area" tabindex="0" role="button"
+        @click=${this.chooseFile}
+        @keydown=${event => (event.key === 'Enter' || event.key === ' ') && this.chooseFile(event)}
+        @dragover=${event => event.preventDefault()}
+        @drop=${this.handleDrop}>${this.labels.dropArea}</div>
+      <input type="file" accept=".csv,.txt,.tsv,text/csv,text/plain" hidden @change=${event => this.readFile(event.target.files[0])}>
+      ${this.spreadsheetFile ? html`<div class="alert alert-warning" role="alert">${this.labels.spreadsheetFile}</div>` : ''}
       <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" id="form-options-csv-header" .checked=${this.hasHeader} @change=${event => this.changeSetting('hasHeader', event.target.checked)}>
         <label class="form-check-label" for="form-options-csv-header">${this.labels.hasHeader}</label>
@@ -89,9 +97,47 @@ export class OptionsImportElement extends LitElement {
 
   handlePaste(event) {
     event.preventDefault();
-    this.text = event.clipboardData.getData('text/plain');
-    this.source = 'paste';
+    this.useText(event.clipboardData.getData('text/plain'), 'paste');
   }
+
+  chooseFile(event) {
+    event.preventDefault();
+    this.querySelector('input[type="file"]').click();
+  }
+
+  handleDrop(event) {
+    event.preventDefault();
+    if (event.dataTransfer.files.length > 0) {
+      this.readFile(event.dataTransfer.files[0]);
+    }
+  }
+
+  async readFile(file) {
+    if (!file) {
+      return;
+    }
+    if (isSpreadsheetFile(file)) {
+      this.text = undefined;
+      this.spreadsheetFile = true;
+      return;
+    }
+    this.useText(decodeFile(new Uint8Array(await file.arrayBuffer())), 'file');
+  }
+
+  useText(text, source) {
+    this.spreadsheetFile = false;
+    this.text = text;
+    this.source = source;
+  }
+}
+
+// Windows reports plain CSV files as application/vnd.ms-excel, so the extension decides first.
+function isSpreadsheetFile(file) {
+  const extension = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
+  if (extension !== '') {
+    return spreadsheetExtensions.includes(extension);
+  }
+  return file.type !== '' && !file.type.startsWith('text/');
 }
 
 function loadSettings() {
