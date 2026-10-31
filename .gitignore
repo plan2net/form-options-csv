@@ -6,3 +6,8 @@
 /.php-cs-fixer.cache
 /.phpunit.result.cache
 /var/
+/public
+/node_modules/
+/package-lock.json
+/test-results/
+/playwright-report/

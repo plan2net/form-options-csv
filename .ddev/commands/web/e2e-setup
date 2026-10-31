@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+## Description: Build a TYPO3 14 test site in .Build/v14 and install Playwright for the end-to-end tests
+## Usage: e2e-setup
+## Example: ddev e2e-setup
+
+set -euo pipefail
+
+site=.Build/v14
+
+if [ ! -d "$site" ]; then
+    composer create-project --no-interaction --no-progress "typo3/cms-base-distribution:^14.3" "$site"
+    composer --working-dir="$site" config repositories.local '{"type": "path", "url": "../../", "options": {"symlink": true}}'
+    composer --working-dir="$site" require --no-progress "plan2net/form-options-csv:@dev"
+    "$site/vendor/bin/typo3" setup --no-interaction --driver=sqlite \
+        --admin-username=admin --admin-user-password='Password-1234!' --admin-email=admin@example.com \
+        --project-name='Form options CSV' --create-site="https://${DDEV_HOSTNAME}/" --server-type=apache
+    cat > "$site/config/system/additional.php" <<'PHP'
+<?php
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['displayErrors'] = 1;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask'] = '*';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['trustedHostsPattern'] = '.*';
+PHP
+fi
+
+if [ -d public ] && [ ! -L public ]; then
+    rmdir public
+fi
+ln -sfn "$site/public" public
+
+npm install --no-audit --no-fund
+npx playwright install --with-deps chromium

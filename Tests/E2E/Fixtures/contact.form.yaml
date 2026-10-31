@@ -1,0 +1,24 @@
+renderingOptions:
+  submitButtonLabel: Submit
+type: Form
+identifier: contact
+label: Contact
+prototypeName: standard
+renderables:
+  -
+    renderingOptions:
+      previousButtonLabel: 'Previous step'
+      nextButtonLabel: 'Next step'
+    type: Page
+    identifier: page-1
+    label: Step
+    renderables:
+      -
+        type: Fieldset
+        identifier: fieldset-1
+        label: 'Your details'
+        renderables:
+          -
+            type: SingleSelect
+            identifier: singleselect-1
+            label: Topic
