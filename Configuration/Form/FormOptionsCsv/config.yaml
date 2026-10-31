@@ -32,6 +32,7 @@ prototypes:
                 columnLabel: 'Label'
                 columnValue: 'Value'
                 columnDefault: 'Default'
+                cancel: 'Cancel'
                 addOne: 'Add 1 option'
                 addMany: 'Add %d options'
                 replaceOne: 'Replace with 1 option'

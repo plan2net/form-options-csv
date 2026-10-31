@@ -177,6 +177,15 @@ test('the replace switch removes the existing options', async ({ page }) => {
   expect(await inputValues(page)).not.toContain('Existing option');
 });
 
+test('cancel closes the modal and changes nothing', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, 'Vienna\tvie');
+  await modal.getByRole('button', { name: 'Cancel' }).click();
+  await expect(modal).toBeHidden();
+  expect(await inputValues(page)).not.toContain('Vienna');
+  expect(await inputValues(page)).toContain('Existing option');
+});
+
 test('the editor undo button removes the whole import in one step', async ({ page }) => {
   const modal = await openImport(page);
   await paste(modal, readmeExample);

@@ -32,6 +32,7 @@ function openModal(formEditorApp, editorConfiguration) {
     importElement.querySelector('.form-options-csv-drop-area').focus();
   });
   modal.addEventListener('paste', event => importElement.handlePaste(event));
+  importElement.addEventListener('options-import-cancel', () => modal.hideModal());
   importElement.addEventListener('options-import-apply', event => {
     applyPlan(formEditorApp, event.detail);
     modal.hideModal();

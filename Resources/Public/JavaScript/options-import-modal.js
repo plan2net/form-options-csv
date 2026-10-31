@@ -48,7 +48,10 @@ export class OptionsImportElement extends LitElement {
       </div>
       ${error ? html`<div class="alert alert-danger" role="alert">${this.labels.unclosedQuote.replace('%d', String(error.line))}</div>` : ''}
       ${plan ? this.renderPreview(plan) : ''}
-      <button type="button" class="btn btn-primary" ?disabled=${importedCount === 0} @click=${() => this.apply(plan)}>${this.applyLabel(importedCount)}</button>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-default" @click=${() => this.dispatchEvent(new CustomEvent('options-import-cancel'))}>${this.labels.cancel}</button>
+        <button type="button" class="btn btn-primary" ?disabled=${importedCount === 0} @click=${() => this.apply(plan)}>${this.applyLabel(importedCount)}</button>
+      </div>
     `;
   }
 
