@@ -34,6 +34,8 @@ jobs:
     name: end-to-end / TYPO3 ${{ matrix.typo3 }}
     steps:
       - uses: actions/checkout@v4
+      # DDEV passes this file into the container, so Playwright knows it runs in CI.
+      - run: echo "CI=true" >> .ddev/.env
       - uses: ddev/github-action-setup-ddev@v1
       - run: ddev e2e-setup ${{ matrix.typo3 }}
       - run: ddev e2e ${{ matrix.typo3 }}

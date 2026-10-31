@@ -254,6 +254,29 @@ test('cancel closes the modal and changes nothing', async ({ page }) => {
   expect(await inputValues(page)).toContain('Existing option');
 });
 
+test('after saving and reloading, the imported default is still ticked', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, readmeExample);
+  await modal.getByRole('button', { name: 'Add 5 options' }).click();
+  await expect(modal).toBeHidden();
+  const saved = page.waitForResponse(response => /saveForm|SaveForm/.test(response.url()));
+  await editor(page).getByRole('button', { name: 'Save' }).click();
+  expect((await saved).ok()).toBe(true);
+
+  await page.reload();
+  await selectTopic(page);
+  const isTicked = (label: string) => editor(page).locator('input').evaluateAll((inputs, wanted) => {
+    const labelInput = inputs.find(input => (input as HTMLInputElement).value === wanted);
+    let container = labelInput?.parentElement;
+    while (container && !container.querySelector('input[type="checkbox"], input[type="radio"]')) {
+      container = container.parentElement;
+    }
+    return (container?.querySelector('input[type="checkbox"], input[type="radio"]') as HTMLInputElement | null)?.checked ?? null;
+  }, label);
+  await expect.poll(() => isTicked('Label 1')).toBe(true);
+  expect(await isTicked('Label 2')).toBe(false);
+});
+
 test('with a long list the apply button stays in view', async ({ page }) => {
   const modal = await openImport(page);
   await paste(modal, Array.from({ length: 80 }, (_, index) => `Country ${index + 1}`).join('\n'));
