@@ -54,7 +54,5 @@ For single select and radio button values only the first entry with a selected o
 
 Columns after the third are ignored.
 
-## Known issues
-
-* Doesn't work within fieldset (yet)
+The import works for elements at any depth, including fieldsets and grid rows.
 

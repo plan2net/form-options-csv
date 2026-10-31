@@ -55,6 +55,70 @@ final class OptionsImporterTest extends UnitTestCase
     }
 
     #[Test]
+    public function importsAnElementInsideNestedFieldsets(): void
+    {
+        $formDefinition = [
+            'renderables' => [
+                [
+                    'type' => 'Page',
+                    'renderables' => [
+                        [
+                            'type' => 'Fieldset',
+                            'renderables' => [
+                                [
+                                    'type' => 'Fieldset',
+                                    'renderables' => [
+                                        ['type' => 'RadioButton', 'properties' => ['options_import' => 'Yes;y']],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $result = (new OptionsImporter())->importInto($formDefinition);
+
+        self::assertSame(
+            ['y' => 'Yes'],
+            $result['renderables'][0]['renderables'][0]['renderables'][0]['renderables'][0]['properties']['options']
+        );
+    }
+
+    #[Test]
+    public function importsAnElementInsideAGridColumn(): void
+    {
+        $formDefinition = [
+            'renderables' => [
+                [
+                    'type' => 'Page',
+                    'renderables' => [
+                        [
+                            'type' => 'GridRow',
+                            'renderables' => [
+                                [
+                                    'type' => 'GridColumn',
+                                    'renderables' => [
+                                        ['type' => 'MultiCheckbox', 'properties' => ['options_import' => 'Yes;y']],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $result = (new OptionsImporter())->importInto($formDefinition);
+
+        self::assertSame(
+            ['y' => 'Yes'],
+            $result['renderables'][0]['renderables'][0]['renderables'][0]['renderables'][0]['properties']['options']
+        );
+    }
+
+    #[Test]
     public function radioButtonKeepsOnlyTheFirstDefault(): void
     {
         $element = $this->importSingleElement('RadioButton', "A;a;1\nB;b;1");

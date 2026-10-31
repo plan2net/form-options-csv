@@ -11,15 +11,11 @@ final readonly class OptionsImporter
 
     public function importInto(array $formDefinition): array
     {
-        foreach ($formDefinition['renderables'] ?? [] as $pageKey => $page) {
-            foreach ($page['renderables'] ?? [] as $key => $element) {
-                if ($this->isImportable($element)) {
-                    $formDefinition['renderables'][$pageKey]['renderables'][$key] = $this->importOptions($element);
-                }
-            }
+        foreach ($formDefinition['renderables'] ?? [] as $key => $renderable) {
+            $formDefinition['renderables'][$key] = $this->importInto($renderable);
         }
 
-        return $formDefinition;
+        return $this->isImportable($formDefinition) ? $this->importOptions($formDefinition) : $formDefinition;
     }
 
     private function isImportable(array $element): bool

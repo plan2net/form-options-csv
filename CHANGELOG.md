@@ -10,4 +10,5 @@
 
 ### Fixed
 
+- Options are imported for elements inside fieldsets and grid rows (#3).
 - No PHP 8.4 deprecation from `str_getcsv`.
