@@ -5,26 +5,40 @@ on:
   pull_request:
 
 jobs:
-  qa:
+  code-style:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['8.2', '8.3', '8.4', '8.5']
-        typo3: ['12.4', '13.4', '14.3']
-        exclude:
-          - php: '8.5'
-            typo3: '12.4'
-    name: TYPO3 ${{ matrix.typo3 }} / PHP ${{ matrix.php }}
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '8.4'
           tools: composer:v2
-      # Public 12.4 releases carry advisories fixed only in paid ELTS releases.
-      - if: matrix.typo3 == '12.4'
-        run: composer config policy.advisories.block false
-      - run: composer require --no-update "typo3/cms-core:^${{ matrix.typo3 }}" "typo3/cms-form:^${{ matrix.typo3 }}"
-      - run: composer update --no-progress
+      - run: composer install --no-progress
       - run: composer run qa
+
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm test
+
+  end-to-end:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        typo3: ['12', '13', '14']
+    name: end-to-end / TYPO3 ${{ matrix.typo3 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ddev/github-action-setup-ddev@v1
+      - run: ddev e2e-setup ${{ matrix.typo3 }}
+      - run: ddev e2e ${{ matrix.typo3 }}
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-typo3-${{ matrix.typo3 }}
+          path: test-results/
