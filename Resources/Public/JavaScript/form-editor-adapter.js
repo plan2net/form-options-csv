@@ -2,3 +2,10 @@
 export function toElement(editorHtml) {
   return editorHtml.jquery ? editorHtml.get(0) : editorHtml;
 }
+
+export function readChoices(formElement) {
+  return {
+    options: (formElement.get('properties.options') ?? []).map(option => ({ label: option._label, value: option._value })),
+    defaultValue: formElement.get('defaultValue'),
+  };
+}

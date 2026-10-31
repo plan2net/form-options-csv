@@ -29,6 +29,11 @@ prototypes:
               label: 'Import from spreadsheet/CSV…'
               labels:
                 dropArea: 'Paste cells here (Ctrl+V / ⌘V), drop a CSV file, or click to choose a file'
+                columnLabel: 'Label'
+                columnValue: 'Value'
+                columnDefault: 'Default'
+                addOne: 'Add 1 option'
+                addMany: 'Add %d options'
       MultiSelect: *optionsImport
       MultiCheckbox: *optionsImport
       RadioButton: *optionsImport
