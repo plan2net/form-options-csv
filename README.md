@@ -9,7 +9,9 @@ The extension adds an **Import from spreadsheet/CSV…** button to these form el
 * Multi checkbox
 * Radio button
 
-These are all elements with a _Choices_ field.
+These are all elements with a _Choices_ field. The button sits below the _Choices_ rows:
+
+![Import button below Choices](Documentation/Images/backend_form_button.png)
 
 Click the button, then paste cells copied from Excel, Google Sheets, LibreOffice or Numbers, or drop a CSV file. A preview shows every row before anything changes:
 
@@ -25,7 +27,7 @@ Click **Add N options**. The rows appear in _Choices_ right away, no save needed
 |-----------|----------------------|------------|
 | 3.x       | 12.4, 13.4, 14.3 LTS | 8.2 to 8.5 |
 
-Only these LTS versions are tested and supported. For TYPO3 11.5, use version 2.x.
+Only these LTS versions are tested and supported. Free updates for TYPO3 12.4 have ended; the extension still works there. For TYPO3 11.5, use version 2.x.
 
 ## Installation
 
@@ -49,10 +51,12 @@ Imported options are **added below** the existing options. Switch on **Replace e
 
 Switch on **First row is a header** if your sheet has a header row. The modal remembers this switch.
 
+Pasting again or choosing another file replaces the preview. Nothing changes in the form until you click the button.
+
 ## Separators
 
 * **Pasted cells** from a spreadsheet are separated by tabs. Pasted text without tabs is split on `;`. Commas never split pasted text, so labels like "Vienna, Austria" work.
-* **CSV files** may use tab, `;` or `,`. The import looks at the first row and uses the separator that appears most often.
+* **CSV files** may use tab, `;` or `,`. The import looks at the first row and uses the separator that appears most often. A file with only one column and commas in its labels is therefore split on the comma: put those labels in double quotes.
 * Put a label in double quotes (`"Label with ; works too"`) to use the separator inside it.
 * Files may be saved as UTF-8, as UTF-16 ("Unicode Text" in Excel) or in the older Windows encoding of Excel. All three work.
 * Excel workbooks (`.xlsx`) cannot be imported directly. Copy the cells or save the sheet as CSV.
@@ -71,9 +75,11 @@ Switch on **First row is a header** if your sheet has a header row. The modal re
 * `Label 4;;1`: label and value are "Label 4", marked as default.
 * `"Label with ; works too";5;1`: label "Label with ; works too", value "5", marked as default.
 
+On a single select or radio button only "Label 1" becomes the default, because only one default is allowed there (see below).
+
 ## Rules
 
 * **Same value twice:** a row whose value already exists, or appears earlier in the import, is skipped. The preview says why.
 * **Defaults on single select and radio button:** only one default is allowed. The first marked row becomes the default and replaces the old one. Later marks are dropped, and the preview says so.
-* **Defaults on multi select and multi checkbox:** every marked row becomes a default, in addition to the existing ones.
+* **Defaults on multi select and multi checkbox:** every marked row becomes a default, in addition to the existing ones. When replacing, only the marked rows are defaults.
 * **Broken quotes:** if a quote is not closed, nothing is imported and the preview names the line.

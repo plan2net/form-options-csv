@@ -8,7 +8,7 @@
 - Requires PHP 8.2 or newer.
 - The import textarea is replaced by an "Import from spreadsheet/CSV…" button that opens a modal. The rows are added in the browser, without saving the form first.
 - Imported options are now added below the existing options. A switch in the modal replaces them instead.
-- The `options_import` property is no longer used. Forms that still contain it lose it on the next save.
+- The `options_import` property is no longer used and is ignored if a form still contains it.
 - Rows with four or more columns now use the first three columns. Before, such a row used column one as both label and value.
 
 ### Added
