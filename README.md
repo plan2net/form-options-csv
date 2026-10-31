@@ -19,13 +19,20 @@ You can insert CSV data (see below for possible format and options) in this fiel
 
  (see below for the given data for this result)
 
+## Supported versions
+
+| Extension | TYPO3                | PHP        |
+|-----------|----------------------|------------|
+| 3.x       | 12.4, 13.4, 14.3 LTS | 8.2 to 8.5 |
+| 2.x       | 11.5                 |            |
+
+Only the LTS lines listed are tested and supported.
+
 ## Installation
 
-Require via composer 
+Require via composer
 
     composer require "plan2net/form-options-csv"
-
-and activate the extension through the Extension manager.
 
 ## Possible values in the import field
 
@@ -43,7 +50,9 @@ and activate the extension through the Extension manager.
 
 The import field is cleared after the form element is saved.
 
-For single select values only the first entry with a selected option is set and ignored for all other entries.
+For single select and radio button values only the first entry with a selected option is set and ignored for all other entries.
+
+Columns after the third are ignored.
 
 ## Known issues
 

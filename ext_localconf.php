@@ -1,16 +1,22 @@
 <?php
 
-(static function () {
-    $typoscript = 'module.tx_form {
-    settings {
-        yamlConfigurations {
-            1604589938 = EXT:form_options_csv/Configuration/FormSetup.yaml
-        }
-    }
-}';
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptSetup($typoscript);
+declare(strict_types=1);
 
-    if (TYPO3_MODE === 'BE') {
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['beforeFormSave'][] = \Plan2net\FormOptionsCsv\Hooks\ImportSelectOptions::class;
+use Plan2net\FormOptionsCsv\Hooks\BeforeFormSaveHook;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+(static function (): void {
+    $GLOBALS['TYPO3_CONF_VARS']['BE']['stylesheets']['form_options_csv'] = 'EXT:form_options_csv/Resources/Public/Backend/css/';
+
+    $typo3Version = (new Typo3Version())->getVersion();
+    if (version_compare($typo3Version, '14.0.0', '<')) {
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['beforeFormSave'][] = BeforeFormSaveHook::class;
+    }
+    // TYPO3 14.2+ finds Configuration/Form/*/config.yaml on its own and deprecates this TypoScript.
+    if (version_compare($typo3Version, '14.2.0', '<')) {
+        ExtensionManagementUtility::addTypoScriptSetup(
+            'module.tx_form.settings.yamlConfigurations.1604589938 = EXT:form_options_csv/Configuration/Form/FormOptionsCsv/config.yaml'
+        );
     }
 })();

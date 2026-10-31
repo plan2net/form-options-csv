@@ -1,0 +1,24 @@
+name: plan2net/form-options-csv
+label: 'Form options CSV import'
+priority: 200
+
+prototypes:
+  standard:
+    formElementsDefinition:
+      SingleSelect: &optionsImport
+        formEditor:
+          predefinedDefaults:
+            properties:
+              options: []
+          editors:
+            300:
+              propertyValidators:
+                10: null
+            310:
+              identifier: options_import
+              templateName: Inspector-TextareaEditor
+              label: 'Import CSV (; separated)'
+              propertyPath: properties.options_import
+      MultiSelect: *optionsImport
+      MultiCheckbox: *optionsImport
+      RadioButton: *optionsImport

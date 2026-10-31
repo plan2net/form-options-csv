@@ -1,0 +1,20 @@
+includes:
+  - vendor/saschaegerer/phpstan-typo3/extension.neon
+
+parameters:
+  level: 8
+  paths:
+    - Classes
+    - Tests
+    - ext_localconf.php
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    # Form definitions are free-form nested arrays.
+    - identifier: missingType.iterableValue
+    # BeforeFormIsSavedEvent only exists in TYPO3 14+.
+    -
+      message: '#BeforeFormIsSavedEvent#'
+      path: Classes/EventListener/ImportOptionsOnSave.php
+    -
+      message: '#BeforeFormIsSavedEvent#'
+      path: Tests/Unit/EventListener/ImportOptionsOnSaveTest.php

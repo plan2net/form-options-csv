@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Plan2net\FormOptionsCsv\:
+    resource: '../Classes/*'
+
+  Plan2net\FormOptionsCsv\Hooks\BeforeFormSaveHook:
+    public: true
