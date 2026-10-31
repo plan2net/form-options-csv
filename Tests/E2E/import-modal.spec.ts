@@ -71,10 +71,10 @@ test('pasted cells show a preview and the number of options to add', async ({ pa
   await paste(modal, readmeExample);
   const rows = modal.locator('tbody tr');
   await expect(rows).toHaveCount(5);
-  await expect(rows.nth(0).locator('td')).toHaveText(['Label 1', '1', '✔']);
-  await expect(rows.nth(2).locator('td')).toHaveText(['Label 3', 'Label 3', '']);
-  await expect(rows.nth(3).locator('td')).toHaveText(['Label 4', 'Label 4', '✔']);
-  await expect(rows.nth(4).locator('td')).toHaveText(['Label with ; works too', '5', '✔']);
+  await expect(rows.nth(0).locator('td')).toHaveText(['Label 1', '1', '✔', '']);
+  await expect(rows.nth(2).locator('td')).toHaveText(['Label 3', 'Label 3', '', '']);
+  await expect(rows.nth(3).locator('td')).toHaveText(['Label 4', 'Label 4', '', 'Only one default allowed, added without default mark']);
+  await expect(rows.nth(4).locator('td')).toHaveText(['Label with ; works too', '5', '', 'Only one default allowed, added without default mark']);
   await expect(modal.getByRole('button', { name: 'Add 5 options' })).toBeEnabled();
 });
 
@@ -108,6 +108,25 @@ test('applying adds the rows below the existing option and they are saved with t
     "5: 'Label with ; works too'",
   ]);
   expect(yaml).toContain('defaultValue: 1');
+});
+
+test('the preview explains skipped rows and dropped default marks', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, 'Again;existing\n ;blank\nX;x;1\nY;y;1\nX again;x');
+  const rows = modal.locator('tbody tr');
+  await expect(rows).toHaveCount(5);
+  await expect(rows.nth(0)).toContainText('Value already exists, skipped');
+  await expect(rows.nth(1)).toContainText('No label, skipped');
+  await expect(rows.nth(3)).toContainText('Only one default allowed, added without default mark');
+  await expect(rows.nth(4)).toContainText('Value appears twice, skipped');
+  await expect(modal.getByRole('button', { name: 'Add 2 options' })).toBeEnabled();
+});
+
+test('an unclosed quote blocks the import and names the line', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, 'A;a\n"Broken;b');
+  await expect(modal.getByText('Line 2: a quote is not closed')).toBeVisible();
+  await expect(modal.getByRole('button', { name: 'Add 0 options' })).toBeDisabled();
 });
 
 test('the header switch drops the first row from the preview', async ({ page }) => {

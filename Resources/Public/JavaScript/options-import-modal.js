@@ -26,7 +26,7 @@ export class OptionsImportElement extends LitElement {
   }
 
   render() {
-    const plan = this.plan();
+    const { plan, error } = this.parse();
     const importedCount = plan?.importedCount ?? 0;
     return html`
       <div class="form-options-csv-drop-area" tabindex="0">${this.labels.dropArea}</div>
@@ -38,6 +38,7 @@ export class OptionsImportElement extends LitElement {
         <input class="form-check-input" type="checkbox" id="form-options-csv-replace" .checked=${this.replace} @change=${event => this.changeSetting('replace', event.target.checked)}>
         <label class="form-check-label" for="form-options-csv-replace">${this.labels.replace}</label>
       </div>
+      ${error ? html`<div class="alert alert-danger" role="alert">${this.labels.unclosedQuote.replace('%d', String(error.line))}</div>` : ''}
       ${plan ? this.renderPreview(plan) : ''}
       <button type="button" class="btn btn-primary" ?disabled=${importedCount === 0} @click=${() => this.apply(plan)}>${this.applyLabel(importedCount)}</button>
     `;
@@ -46,23 +47,30 @@ export class OptionsImportElement extends LitElement {
   renderPreview(plan) {
     return html`
       <table class="table table-sm">
-        <thead><tr><th>${this.labels.columnLabel}</th><th>${this.labels.columnValue}</th><th>${this.labels.columnDefault}</th></tr></thead>
+        <thead><tr><th>${this.labels.columnLabel}</th><th>${this.labels.columnValue}</th><th>${this.labels.columnDefault}</th><th></th></tr></thead>
         <tbody>
-          ${plan.preview.map(row => html`<tr><td>${row.label}</td><td>${row.value}</td><td>${row.isDefault ? '✔' : ''}</td></tr>`)}
+          ${plan.preview.map(row => html`
+            <tr class=${row.skipReason ? 'text-body-secondary' : ''}>
+              <td>${row.label}</td>
+              <td>${row.value}</td>
+              <td>${row.isDefault && !row.note ? '✔' : ''}</td>
+              <td>${this.labels[row.skipReason ?? row.note] ?? ''}</td>
+            </tr>
+          `)}
         </tbody>
       </table>
     `;
   }
 
-  plan() {
+  parse() {
     if (this.text === undefined) {
-      return null;
+      return { plan: null, error: null };
     }
     const { rows, error } = parseRows(this.text, { source: this.source, hasHeader: this.hasHeader });
     if (error) {
-      return null;
+      return { plan: null, error };
     }
-    return planImport(rows, this.existing, { replace: this.replace, singleValue: this.singleValue });
+    return { plan: planImport(rows, this.existing, { replace: this.replace, singleValue: this.singleValue }), error: null };
   }
 
   applyLabel(importedCount) {
