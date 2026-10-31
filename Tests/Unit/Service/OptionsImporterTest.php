@@ -42,7 +42,7 @@ final class OptionsImporterTest extends UnitTestCase
             ],
             $element['properties']['options']
         );
-        self::assertSame('1', $element['defaultValue']);
+        self::assertSame(1, $element['defaultValue']);
     }
 
     #[Test]
@@ -51,7 +51,7 @@ final class OptionsImporterTest extends UnitTestCase
         $element = $this->importSingleElement('MultiSelect', "Label 1;1;1\r\nLabel 2;2\r\nLabel 3\r\n");
 
         self::assertSame(['1' => 'Label 1', '2' => 'Label 2', 'Label 3' => 'Label 3'], $element['properties']['options']);
-        self::assertSame(['1'], $element['defaultValue']);
+        self::assertSame([1], $element['defaultValue']);
     }
 
     #[Test]

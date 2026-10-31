@@ -40,7 +40,8 @@ final readonly class OptionsImporter
             $element['properties']['options'] += [$value => $label];
 
             if ((bool)($columns[2] ?? false)) {
-                $defaultValues[] = $value;
+                // The form editor stores number-like values as integers and compares strictly.
+                $defaultValues[] = (string)(int)$value === $value ? (int)$value : $value;
             }
         }
         $element['defaultValue'] = in_array($element['type'], self::SINGLE_VALUE_TYPES, true)
