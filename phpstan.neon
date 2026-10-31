@@ -11,9 +11,9 @@ parameters:
   ignoreErrors:
     # Form definitions are free-form nested arrays.
     - identifier: missingType.iterableValue
-    # BeforeFormIsSavedEvent only exists in TYPO3 14+.
+    # BeforeFormIsSavedEvent only exists in TYPO3 14+, AsEventListener in 13+.
     -
-      message: '#BeforeFormIsSavedEvent#'
+      message: '#BeforeFormIsSavedEvent|AsEventListener#'
       path: Classes/EventListener/ImportOptionsOnSave.php
     -
       message: '#BeforeFormIsSavedEvent#'
