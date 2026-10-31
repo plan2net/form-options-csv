@@ -18,6 +18,63 @@ export function parseRows(text, { source, hasHeader = false }) {
   };
 }
 
+export function planImport(rows, existing, { replace, singleValue }) {
+  const plan = planOptions(rows, existing, replace);
+  const optionValues = valueSet(plan.options);
+  // A default without its option is broken data, so it is dropped in both modes.
+  const keptDefaults = [existing.defaultValue ?? []].flat().filter(value => optionValues.has(String(value)));
+  const markedRows = plan.preview.filter(row => !row.skipReason && row.isDefault);
+  if (singleValue) {
+    const [firstMarked, ...laterMarked] = markedRows;
+    return {
+      ...plan,
+      preview: plan.preview.map(row => laterMarked.includes(row) ? { ...row, note: 'onlyOneDefault' } : row),
+      defaultValue: firstMarked?.value ?? keptDefaults[0] ?? '',
+    };
+  }
+  const markedValues = markedRows.map(row => row.value);
+  return {
+    ...plan,
+    defaultValue: replace && markedValues.length > 0 ? markedValues : [...keptDefaults, ...markedValues],
+  };
+}
+
+function planOptions(rows, existing, replace) {
+  const keptOptions = replace ? [] : existing.options;
+  const existingValues = valueSet(keptOptions);
+  const pastedValues = new Set();
+  const skipReasonFor = row => {
+    if (row.skipReason) {
+      return row.skipReason;
+    }
+    if (existingValues.has(String(row.value))) {
+      return 'valueExists';
+    }
+    if (pastedValues.has(String(row.value))) {
+      return 'valueRepeated';
+    }
+    return null;
+  };
+  const preview = rows.map(row => {
+    const skipReason = skipReasonFor(row);
+    if (skipReason) {
+      return { ...row, skipReason };
+    }
+    pastedValues.add(String(row.value));
+    return row;
+  });
+  const imported = preview.filter(row => !row.skipReason).map(({ label, value }) => ({ label, value }));
+  return {
+    options: [...keptOptions, ...imported],
+    preview,
+    importedCount: imported.length,
+  };
+}
+
+function valueSet(options) {
+  return new Set(options.map(option => String(option.value)));
+}
+
 function detectPasteSeparator(text) {
   return readRecords(text, '\t').records.some(fields => fields.length > 1) ? '\t' : ';';
 }
