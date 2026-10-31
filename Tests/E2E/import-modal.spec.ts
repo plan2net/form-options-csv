@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { expect, test, type FrameLocator, type Locator, type Page } from '@playwright/test';
 
@@ -26,12 +26,17 @@ async function paste(modal: Locator, text: string): Promise<void> {
   }, text);
 }
 
+function inputValues(page: Page): Promise<string[]> {
+  return editor(page).locator('input').evaluateAll(inputs => inputs.map(input => (input as HTMLInputElement).value));
+}
+
 const readmeExample = 'Label 1;1;1\nLabel 2;2\nLabel 3\nLabel 4;;1\n"Label with ; works too";5;1';
 
 test.beforeEach(async ({ page }) => {
   mkdirSync(dirname(formFile), { recursive: true });
   copyFileSync('Tests/E2E/Fixtures/contact.form.yaml', formFile);
-  await page.goto('/typo3/');
+  // The login script resets the username field once it has loaded.
+  await page.goto('/typo3/', { waitUntil: 'networkidle' });
   await page.locator('#t3-username').fill('admin');
   await page.locator('#t3-password').fill('Password-1234!');
   await page.locator('#t3-login-submit').click();
@@ -64,7 +69,53 @@ test('the import button opens a modal with a paste area', async ({ page }) => {
 test('pasted cells show a preview and the number of options to add', async ({ page }) => {
   const modal = await openImport(page);
   await paste(modal, readmeExample);
-  await expect(modal.locator('tbody tr')).toHaveCount(5);
-  await expect(modal.locator('tbody tr').nth(4)).toContainText('Label with ; works too');
+  const rows = modal.locator('tbody tr');
+  await expect(rows).toHaveCount(5);
+  await expect(rows.nth(0).locator('td')).toHaveText(['Label 1', '1', '✔']);
+  await expect(rows.nth(2).locator('td')).toHaveText(['Label 3', 'Label 3', '']);
+  await expect(rows.nth(3).locator('td')).toHaveText(['Label 4', 'Label 4', '✔']);
+  await expect(rows.nth(4).locator('td')).toHaveText(['Label with ; works too', '5', '✔']);
   await expect(modal.getByRole('button', { name: 'Add 5 options' })).toBeEnabled();
+});
+
+test('the paste area has focus once the modal is open, so Ctrl+V pastes into it', async ({ page }) => {
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  const modal = await openImport(page);
+  await expect(modal.locator('.form-options-csv-drop-area')).toBeFocused();
+  await page.evaluate(text => navigator.clipboard.writeText(text), 'Pasted;p');
+  await page.keyboard.press('ControlOrMeta+V');
+  await expect(modal.locator('tbody tr')).toHaveCount(1);
+});
+
+test('applying adds the rows below the existing option and they are saved with the form', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, `${readmeExample}\nAgain;existing`);
+  await modal.getByRole('button', { name: 'Add 5 options' }).click();
+  await expect(modal).toBeHidden();
+  await expect.poll(() => inputValues(page)).toEqual(expect.arrayContaining(['Existing option', 'Label 1', 'Label with ; works too']));
+
+  const saved = page.waitForResponse(response => /saveForm|SaveForm/.test(response.url()));
+  await editor(page).getByRole('button', { name: 'Save' }).click();
+  expect((await saved).ok()).toBe(true);
+  const yaml = readFileSync(formFile, 'utf8');
+  const optionLines = yaml.split('\n').filter(line => /^ {16}\S/.test(line)).map(line => line.trim());
+  expect(optionLines).toEqual([
+    "existing: 'Existing option'",
+    "1: 'Label 1'",
+    "2: 'Label 2'",
+    "'Label 3': 'Label 3'",
+    "'Label 4': 'Label 4'",
+    "5: 'Label with ; works too'",
+  ]);
+  expect(yaml).toContain('defaultValue: 1');
+});
+
+test('the editor undo button removes the whole import in one step', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, readmeExample);
+  await modal.getByRole('button', { name: 'Add 5 options' }).click();
+  await expect.poll(() => inputValues(page)).toContain('Label 1');
+  await editor(page).locator('[data-identifier="undoButton"]').click();
+  await expect.poll(() => inputValues(page)).not.toContain('Label 1');
+  expect(await inputValues(page)).toContain('Existing option');
 });

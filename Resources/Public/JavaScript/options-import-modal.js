@@ -14,10 +14,11 @@ export class OptionsImportElement extends LitElement {
   }
 
   render() {
+    const importedCount = this.plan?.importedCount ?? 0;
     return html`
-      <div class="form-options-csv-drop-area" tabindex="0" @paste=${this.handlePaste}>${this.labels.dropArea}</div>
+      <div class="form-options-csv-drop-area" tabindex="0">${this.labels.dropArea}</div>
       ${this.plan ? this.renderPreview() : ''}
-      <button type="button" class="btn btn-primary" ?disabled=${!this.plan?.importedCount}>${this.applyLabel()}</button>
+      <button type="button" class="btn btn-primary" ?disabled=${importedCount === 0} @click=${this.apply}>${this.applyLabel(importedCount)}</button>
     `;
   }
 
@@ -32,16 +33,24 @@ export class OptionsImportElement extends LitElement {
     `;
   }
 
-  applyLabel() {
-    const count = this.plan?.importedCount ?? 0;
-    return count === 1 ? this.labels.addOne : this.labels.addMany.replace('%d', String(count));
+  applyLabel(importedCount) {
+    return importedCount === 1 ? this.labels.addOne : this.labels.addMany.replace('%d', String(importedCount));
+  }
+
+  apply() {
+    this.dispatchEvent(new CustomEvent('options-import-apply', { detail: this.plan }));
   }
 
   handlePaste(event) {
     event.preventDefault();
-    const { rows } = parseRows(event.clipboardData.getData('text/plain'), { source: 'paste' });
+    const { rows, error } = parseRows(event.clipboardData.getData('text/plain'), { source: 'paste' });
+    if (error) {
+      return;
+    }
     this.plan = planImport(rows, this.existing, { replace: false, singleValue: this.singleValue });
   }
 }
 
-customElements.define('form-options-csv-import', OptionsImportElement);
+if (!customElements.get('form-options-csv-import')) {
+  customElements.define('form-options-csv-import', OptionsImportElement);
+}

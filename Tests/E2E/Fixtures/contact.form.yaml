@@ -22,3 +22,6 @@ renderables:
             type: SingleSelect
             identifier: singleselect-1
             label: Topic
+            properties:
+              options:
+                existing: 'Existing option'
