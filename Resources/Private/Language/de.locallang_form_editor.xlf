@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="EXT:form_options_csv/Resources/Private/Language/locallang_form_editor.xlf" product-name="form_options_csv">
+        <header/>
+        <body>
+            <trans-unit id="formOptionsCsv.button">
+                <source>Import from spreadsheet/CSV…</source>
+                <target>Aus Tabelle/CSV importieren…</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.dropArea">
+                <source>Paste cells here (Ctrl+V / ⌘V), drop a CSV file, or click to choose a file</source>
+                <target>Zellen hier einfügen (Strg+V / ⌘V), eine CSV-Datei hierher ziehen oder klicken, um eine Datei auszuwählen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnLabel">
+                <source>Label</source>
+                <target>Beschriftung</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnValue">
+                <source>Value</source>
+                <target>Wert</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnDefault">
+                <source>Default</source>
+                <target>Vorauswahl</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnNote">
+                <source>Note</source>
+                <target>Hinweis</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.cancel">
+                <source>Cancel</source>
+                <target>Abbrechen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.addOne">
+                <source>Add 1 option</source>
+                <target>1 Option hinzufügen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.addMany">
+                <source>Add %d options</source>
+                <target>%d Optionen hinzufügen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.replaceOne">
+                <source>Replace with 1 option</source>
+                <target>Durch 1 Option ersetzen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.replaceMany">
+                <source>Replace with %d options</source>
+                <target>Durch %d Optionen ersetzen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.hasHeader">
+                <source>First row is a header</source>
+                <target>Erste Zeile ist eine Überschrift</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.replace">
+                <source>Replace existing options</source>
+                <target>Bestehende Optionen ersetzen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.header">
+                <source>Header row, skipped</source>
+                <target>Überschrift, übersprungen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.noLabel">
+                <source>No label, skipped</source>
+                <target>Keine Beschriftung, übersprungen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.valueExists">
+                <source>Value already exists, skipped</source>
+                <target>Wert existiert bereits, übersprungen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.valueRepeated">
+                <source>Value appears twice, skipped</source>
+                <target>Wert kommt doppelt vor, übersprungen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.onlyOneDefault">
+                <source>Only one default allowed, added without default mark</source>
+                <target>Nur eine Vorauswahl erlaubt, ohne Vorauswahl hinzugefügt</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.unclosedQuote">
+                <source>Line %d: a quote is not closed</source>
+                <target>Zeile %d: Ein Anführungszeichen ist nicht geschlossen</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.spreadsheetFile">
+                <source>This is a spreadsheet file. Copy the cells or save the sheet as CSV.</source>
+                <target>Das ist eine Tabellendatei. Kopieren Sie die Zellen oder speichern Sie die Tabelle als CSV.</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.unsupportedFile">
+                <source>This file type cannot be imported. Use a CSV or text file.</source>
+                <target>Dieser Dateityp kann nicht importiert werden. Verwenden Sie eine CSV- oder Textdatei.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

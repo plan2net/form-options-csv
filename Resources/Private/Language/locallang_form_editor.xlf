@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:form_options_csv/Resources/Private/Language/locallang_form_editor.xlf" product-name="form_options_csv">
+        <header/>
+        <body>
+            <trans-unit id="formOptionsCsv.button">
+                <source>Import from spreadsheet/CSV…</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.dropArea">
+                <source>Paste cells here (Ctrl+V / ⌘V), drop a CSV file, or click to choose a file</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnLabel">
+                <source>Label</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnValue">
+                <source>Value</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnDefault">
+                <source>Default</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.columnNote">
+                <source>Note</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.cancel">
+                <source>Cancel</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.addOne">
+                <source>Add 1 option</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.addMany">
+                <source>Add %d options</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.replaceOne">
+                <source>Replace with 1 option</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.replaceMany">
+                <source>Replace with %d options</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.hasHeader">
+                <source>First row is a header</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.replace">
+                <source>Replace existing options</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.header">
+                <source>Header row, skipped</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.noLabel">
+                <source>No label, skipped</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.valueExists">
+                <source>Value already exists, skipped</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.valueRepeated">
+                <source>Value appears twice, skipped</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.onlyOneDefault">
+                <source>Only one default allowed, added without default mark</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.unclosedQuote">
+                <source>Line %d: a quote is not closed</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.spreadsheetFile">
+                <source>This is a spreadsheet file. Copy the cells or save the sheet as CSV.</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.unsupportedFile">
+                <source>This file type cannot be imported. Use a CSV or text file.</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

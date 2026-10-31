@@ -1,8 +1,10 @@
-import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 import { expect, test, type FrameLocator, type Locator, type Page } from '@playwright/test';
 
-const formFile = `.Build/v${process.env.TYPO3_VERSION ?? '14'}/public/fileadmin/form_definitions/contact.form.yaml`;
+const typo3Version = process.env.TYPO3_VERSION ?? '14';
+const formFile = `.Build/v${typo3Version}/public/fileadmin/form_definitions/contact.form.yaml`;
 
 function editor(page: Page): FrameLocator {
   return page.frameLocator('#typo3-contentIframe');
@@ -32,6 +34,13 @@ function inputValues(page: Page): Promise<string[]> {
 
 const readmeExample = 'Label 1;1;1\nLabel 2;2\nLabel 3\nLabel 4;;1\n"Label with ; works too";5;1';
 
+function setBackendLanguage(language: string): void {
+  const [databaseFile] = readdirSync(`.Build/v${typo3Version}/var/sqlite`);
+  const database = new DatabaseSync(`.Build/v${typo3Version}/var/sqlite/${databaseFile}`);
+  database.prepare('UPDATE be_users SET lang = ? WHERE username = ?').run(language, 'admin');
+  database.close();
+}
+
 test.beforeEach(async ({ page }) => {
   mkdirSync(dirname(formFile), { recursive: true });
   copyFileSync('Tests/E2E/Fixtures/contact.form.yaml', formFile);
@@ -50,6 +59,20 @@ test.beforeEach(async ({ page }) => {
     await expect(editFormLink).toBeVisible({ timeout: 5_000 });
   }).toPass({ timeout: 45_000 });
   await editFormLink.click();
+});
+
+test.describe('with a German backend', () => {
+  test.beforeAll(() => setBackendLanguage('de'));
+  test.afterAll(() => setBackendLanguage('default'));
+
+  test('the button and the modal are translated', async ({ page }) => {
+    await selectTopic(page);
+    await editor(page).getByRole('button', { name: 'Aus Tabelle/CSV importieren…' }).click();
+    const modal = page.getByRole('dialog');
+    await paste(modal, 'Wien\twie\nGraz\tgrz');
+    await expect(modal.getByRole('button', { name: '2 Optionen hinzufügen' })).toBeEnabled();
+    await expect(modal.getByText('Erste Zeile ist eine Überschrift')).toBeVisible();
+  });
 });
 
 test('the settings of a select show the import button instead of a textarea', async ({ page }) => {

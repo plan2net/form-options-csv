@@ -5,6 +5,9 @@ priority: 200
 prototypes:
   standard:
     formEditor:
+      # The form framework looks up every editor text as a key in these files, so the keys carry a unique prefix.
+      translationFiles:
+        1604589938: 'EXT:form_options_csv/Resources/Private/Language/locallang_form_editor.xlf'
       dynamicJavaScriptModules:
         additionalViewModelModules:
           1604589938: '@plan2net/form-options-csv/options-import.js'
@@ -26,25 +29,28 @@ prototypes:
             310:
               identifier: optionsImport
               templateName: Inspector-OptionsImportEditor
-              label: 'Import from spreadsheet/CSV…'
+              label: 'formOptionsCsv.button'
               labels:
-                dropArea: 'Paste cells here (Ctrl+V / ⌘V), drop a CSV file, or click to choose a file'
-                columnLabel: 'Label'
-                columnValue: 'Value'
-                columnDefault: 'Default'
-                cancel: 'Cancel'
-                addOne: 'Add 1 option'
-                addMany: 'Add %d options'
-                replaceOne: 'Replace with 1 option'
-                replaceMany: 'Replace with %d options'
-                hasHeader: 'First row is a header'
-                replace: 'Replace existing options'
-                noLabel: 'No label, skipped'
-                valueExists: 'Value already exists, skipped'
-                valueRepeated: 'Value appears twice, skipped'
-                onlyOneDefault: 'Only one default allowed, added without default mark'
-                unclosedQuote: 'Line %d: a quote is not closed'
-                spreadsheetFile: 'This is a spreadsheet file. Copy the cells or save the sheet as CSV.'
+                dropArea: 'formOptionsCsv.dropArea'
+                columnLabel: 'formOptionsCsv.columnLabel'
+                columnValue: 'formOptionsCsv.columnValue'
+                columnDefault: 'formOptionsCsv.columnDefault'
+                columnNote: 'formOptionsCsv.columnNote'
+                cancel: 'formOptionsCsv.cancel'
+                addOne: 'formOptionsCsv.addOne'
+                addMany: 'formOptionsCsv.addMany'
+                replaceOne: 'formOptionsCsv.replaceOne'
+                replaceMany: 'formOptionsCsv.replaceMany'
+                hasHeader: 'formOptionsCsv.hasHeader'
+                replace: 'formOptionsCsv.replace'
+                header: 'formOptionsCsv.header'
+                noLabel: 'formOptionsCsv.noLabel'
+                valueExists: 'formOptionsCsv.valueExists'
+                valueRepeated: 'formOptionsCsv.valueRepeated'
+                onlyOneDefault: 'formOptionsCsv.onlyOneDefault'
+                unclosedQuote: 'formOptionsCsv.unclosedQuote'
+                spreadsheetFile: 'formOptionsCsv.spreadsheetFile'
+                unsupportedFile: 'formOptionsCsv.unsupportedFile'
       MultiSelect: *optionsImport
       MultiCheckbox: *optionsImport
       RadioButton: *optionsImport
