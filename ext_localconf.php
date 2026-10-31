@@ -11,7 +11,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
     if (version_compare($typo3Version, '14.0.0', '<')) {
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['beforeFormSave'][] = BeforeFormSaveHook::class;
     }
-    // TYPO3 14.2+ finds Configuration/Form/*/config.yaml on its own and deprecates this TypoScript.
+    // TYPO3 14.2 and later load the form setup by themselves.
     if (version_compare($typo3Version, '14.2.0', '<')) {
         ExtensionManagementUtility::addTypoScriptSetup(
             'module.tx_form.settings.yamlConfigurations.1604589938 = EXT:form_options_csv/Configuration/Form/FormOptionsCsv/config.yaml'

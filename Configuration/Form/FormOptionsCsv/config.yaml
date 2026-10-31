@@ -5,7 +5,7 @@ priority: 200
 prototypes:
   standard:
     formEditor:
-      # The form framework looks up every editor text as a key in these files, so the keys carry a unique prefix.
+      # Every editor text is looked up as a key in these files, so our keys have their own prefix.
       translationFiles:
         1604589938: 'EXT:form_options_csv/Resources/Private/Language/locallang_form_editor.xlf'
       dynamicJavaScriptModules:

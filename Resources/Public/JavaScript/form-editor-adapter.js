@@ -1,4 +1,4 @@
-// TYPO3 12 and 13 hand inspector editors over as jQuery objects, TYPO3 14 as DOM elements.
+// TYPO3 12 and 13 pass jQuery objects, TYPO3 14 passes plain elements.
 export function toElement(editorHtml) {
   return editorHtml.jquery ? editorHtml.get(0) : editorHtml;
 }
@@ -10,7 +10,7 @@ export function readChoices(formElement) {
   };
 }
 
-// Rows loaded from the form carry signed original values, so they are written back untouched.
+// Loaded rows carry signed original values, so they are kept as they are.
 export function writeChoices(formElement, { options, defaultValue }) {
   const unusedStoredOptions = [...(formElement.get('properties.options') ?? [])];
   formElement.set('properties.options', options.map(option => {

@@ -20,7 +20,7 @@ if [ -d public ] && [ ! -L public ]; then
     rmdir public || { echo "public/ is a real folder with content. Move it away first." >&2; exit 1; }
 fi
 ln -sfn "$site/public" public
-# PHP caches resolved paths, so without a reload it keeps serving the previous site.
+# PHP remembers the old link target, so it must be reloaded.
 sudo kill -USR2 "$(pgrep -o php-fpm)"
 curl -fsS --retry 20 --retry-connrefused --retry-all-errors --retry-delay 1 -o /dev/null http://localhost/typo3/
 

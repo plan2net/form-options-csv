@@ -44,7 +44,7 @@ function setBackendLanguage(language: string): void {
 test.beforeEach(async ({ page }) => {
   mkdirSync(dirname(formFile), { recursive: true });
   copyFileSync('Tests/E2E/Fixtures/contact.form.yaml', formFile);
-  // The login script resets the username field once it has loaded.
+  // The login script clears the username field when it loads late.
   await page.goto('/typo3/', { waitUntil: 'networkidle' });
   await page.locator('#t3-username').fill('admin');
   await page.locator('#t3-password').fill('Password-1234!');
@@ -182,13 +182,58 @@ test('an Excel workbook gets a hint instead of a preview', async ({ page }) => {
   await expect(modal.locator('tbody tr')).toHaveCount(0);
 });
 
-test('the header switch drops the first row from the preview', async ({ page }) => {
+test('the header switch shows the first row as skipped header', async ({ page }) => {
   const modal = await openImport(page);
   await paste(modal, 'Label\tValue\nVienna\tvie');
-  await expect(modal.locator('tbody tr')).toHaveCount(2);
+  await expect(modal.getByRole('button', { name: 'Add 2 options' })).toBeEnabled();
   await modal.getByLabel('First row is a header').check();
-  await expect(modal.locator('tbody tr')).toHaveCount(1);
-  await expect(modal.locator('tbody tr').first().locator('td').first()).toHaveText('Vienna');
+  await expect(modal.locator('tbody tr').first().locator('td')).toHaveText(['Label', 'Value', '', 'Header row, skipped']);
+  await expect(modal.getByRole('button', { name: 'Add 1 option' })).toBeEnabled();
+});
+
+test('the header switch is remembered, the replace switch is not', async ({ page }) => {
+  let modal = await openImport(page);
+  await modal.getByLabel('First row is a header').check();
+  await modal.getByLabel('Replace existing options').check();
+  await modal.getByRole('button', { name: 'Cancel' }).click();
+  await expect(modal).toBeHidden();
+  await editor(page).getByRole('button', { name: 'Import from spreadsheet/CSV…' }).click();
+  modal = page.getByRole('dialog');
+  await expect(modal.getByLabel('First row is a header')).toBeChecked();
+  await expect(modal.getByLabel('Replace existing options')).not.toBeChecked();
+});
+
+test('a skipped row never shows a default mark and the note column has a heading', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, 'Again;existing;1');
+  await expect(modal.locator('tbody tr').first().locator('td')).toHaveText(['Again', 'existing', '', 'Value already exists, skipped']);
+  await expect(modal.locator('thead th')).toHaveText(['Label', 'Value', 'Default', 'Note']);
+});
+
+test('choosing the same file again reads it again', async ({ page }) => {
+  const modal = await openImport(page);
+  const fileInput = modal.locator('input[type="file"]');
+  await fileInput.setInputFiles({ name: 'list.csv', mimeType: 'text/csv', buffer: Buffer.from('One;1') });
+  await expect(modal.locator('tbody tr').first().locator('td').first()).toHaveText('One');
+  await fileInput.setInputFiles({ name: 'list.csv', mimeType: 'text/csv', buffer: Buffer.from('Two;2') });
+  await expect(modal.locator('tbody tr').first().locator('td').first()).toHaveText('Two');
+});
+
+test('a file dropped next to the paste area is still imported', async ({ page }) => {
+  const modal = await openImport(page);
+  await modal.getByLabel('Replace existing options').evaluate(target => {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(new File(['Bern;brn'], 'cities.csv', { type: 'text/csv' }));
+    target.dispatchEvent(new DragEvent('drop', { dataTransfer, bubbles: true, cancelable: true }));
+  });
+  await expect(modal.locator('tbody tr').first().locator('td').first()).toHaveText('Bern');
+});
+
+test('an image file gets a hint instead of a preview', async ({ page }) => {
+  const modal = await openImport(page);
+  await modal.locator('input[type="file"]').setInputFiles({ name: 'logo.png', mimeType: 'image/png', buffer: Buffer.from([0x89, 0x50, 0x4e, 0x47]) });
+  await expect(modal.getByText('This file type cannot be imported. Use a CSV or text file.')).toBeVisible();
+  await expect(modal.locator('tbody tr')).toHaveCount(0);
 });
 
 test('the replace switch removes the existing options', async ({ page }) => {

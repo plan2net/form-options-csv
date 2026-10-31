@@ -99,8 +99,9 @@ test('empty input gives no rows and no error', () => {
   assert.deepEqual(parseRows('', { source: 'paste' }), { rows: [], error: null });
 });
 
-test('the header row is dropped even when its first cell is empty', () => {
+test('the header row is skipped as header even when its first cell is empty', () => {
   assert.deepEqual(parseRows(';Value\nA;a', { source: 'paste', hasHeader: true }).rows, [
+    { label: '', value: 'Value', isDefault: false, skipReason: 'header' },
     { label: 'A', value: 'a', isDefault: false },
   ]);
 });
@@ -115,8 +116,9 @@ test('a lone carriage return inside a quoted value becomes one space', () => {
   assert.deepEqual(parseRows('A;"x\ry"', { source: 'paste' }).rows, [{ label: 'A', value: 'x y', isDefault: false }]);
 });
 
-test('the header option drops the first non-empty row', () => {
+test('the header option marks the first non-empty row as skipped header', () => {
   assert.deepEqual(parseRows('\nLabel\tValue\nVienna\tvie', { source: 'paste', hasHeader: true }).rows, [
+    { label: 'Label', value: 'Value', isDefault: false, skipReason: 'header' },
     { label: 'Vienna', value: 'vie', isDefault: false },
   ]);
 });

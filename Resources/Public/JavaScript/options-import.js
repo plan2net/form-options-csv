@@ -26,7 +26,7 @@ function openModal(formEditorApp, editorConfiguration) {
     content: importElement,
     size: Modal.sizes.large,
   });
-  // TYPO3 12 and 13 leave focus in the editor frame, TYPO3 14 puts it on the close button.
+  // TYPO3 does not focus the modal content, but Ctrl+V should work right away.
   modal.addEventListener('typo3-modal-shown', () => {
     modal.ownerDocument.defaultView.focus();
     importElement.querySelector('.form-options-csv-drop-area').focus();
@@ -41,7 +41,7 @@ function openModal(formEditorApp, editorConfiguration) {
 
 function applyPlan(formEditorApp, plan) {
   formEditorApp.saveApplicationState();
-  // Saving the state replaces the live form definition, so the element must be looked up again.
+  // Saving the state swaps the form data, so the element must be fetched again.
   const formElement = formEditorApp.getRepository().findFormElement(formEditorApp.getCurrentlySelectedFormElement());
   writeChoices(formElement, plan);
   formEditorApp.getViewModel().renderInspectorEditors();

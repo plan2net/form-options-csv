@@ -13,7 +13,7 @@ export function parseRows(text, { source, hasHeader = false }) {
     return { rows: [], error: { reason: 'unclosedQuote', line: lineAt(text, quoteStartIndex) } };
   }
   return {
-    rows: records.filter(isFilled).slice(hasHeader ? 1 : 0).map(toRow),
+    rows: records.filter(isFilled).map(toRow).map((row, index) => hasHeader && index === 0 ? { ...row, skipReason: 'header' } : row),
     error: null,
   };
 }
@@ -21,7 +21,7 @@ export function parseRows(text, { source, hasHeader = false }) {
 export function planImport(rows, existing, { replace, singleValue }) {
   const plan = planOptions(rows, existing, replace);
   const optionValues = valueSet(plan.options);
-  // A default without its option is broken data, so it is dropped in both modes.
+  // A default without its option is broken, so it is dropped.
   const keptDefaults = [existing.defaultValue ?? []].flat().filter(value => optionValues.has(String(value)));
   const markedRows = plan.preview.filter(row => !row.skipReason && row.isDefault);
   if (singleValue) {
