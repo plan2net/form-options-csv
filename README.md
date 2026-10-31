@@ -54,5 +54,7 @@ For single select and radio button values only the first entry with a selected o
 
 Columns after the third are ignored.
 
+You can also copy rows from a spreadsheet (Excel, LibreOffice, Google Sheets, Numbers) and paste them. Pasted cells are separated by tabs, and the import handles that. If a line has a tab, the tab separates the columns and `;` is just text.
+
 The import works for elements at any depth, including fieldsets and grid rows.
 

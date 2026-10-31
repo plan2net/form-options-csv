@@ -34,7 +34,7 @@ final readonly class OptionsImporter
             if (trim($line) === '') {
                 continue;
             }
-            $columns = str_getcsv($line, ';', '"', '');
+            $columns = str_getcsv($line, str_contains($line, "\t") ? "\t" : ';', '"', '');
             $label = $columns[0];
             $value = ($columns[1] ?? '') === '' ? $label : $columns[1];
             $element['properties']['options'] += [$value => $label];

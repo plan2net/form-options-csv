@@ -176,6 +176,15 @@ final class OptionsImporterTest extends UnitTestCase
         self::assertSame('value', $element['defaultValue']);
     }
 
+    #[Test]
+    public function rowsPastedFromASpreadsheetAreSplitOnTabs(): void
+    {
+        $element = $this->importSingleElement('MultiSelect', "Vienna; Austria\tvie\t1\nGraz\tgrz");
+
+        self::assertSame(['vie' => 'Vienna; Austria', 'grz' => 'Graz'], $element['properties']['options']);
+        self::assertSame(['vie'], $element['defaultValue']);
+    }
+
     private function importSingleElement(string $type, string $optionsImport): array
     {
         $formDefinition = [
