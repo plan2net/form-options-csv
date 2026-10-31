@@ -254,6 +254,12 @@ test('cancel closes the modal and changes nothing', async ({ page }) => {
   expect(await inputValues(page)).toContain('Existing option');
 });
 
+test('with a long list the apply button stays in view', async ({ page }) => {
+  const modal = await openImport(page);
+  await paste(modal, Array.from({ length: 80 }, (_, index) => `Country ${index + 1}`).join('\n'));
+  await expect(modal.getByRole('button', { name: 'Add 80 options' })).toBeInViewport();
+});
+
 test('the editor undo button removes the whole import in one step', async ({ page }) => {
   const modal = await openImport(page);
   await paste(modal, readmeExample);

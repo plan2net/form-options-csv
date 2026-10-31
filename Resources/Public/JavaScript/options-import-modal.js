@@ -39,6 +39,7 @@ export class OptionsImportElement extends LitElement {
       <style>
         .form-options-csv-drop-area { border: 2px dashed currentColor; border-radius: .5rem; padding: 2rem 1rem; margin-bottom: 1rem; text-align: center; cursor: pointer; opacity: .85; }
         .form-options-csv-drop-area:hover, .form-options-csv-drop-area:focus-visible { opacity: 1; }
+        .form-options-csv-preview { max-height: 45vh; overflow-y: auto; margin-bottom: 1rem; }
       </style>
       <div class="form-options-csv-drop-area" tabindex="0" role="button" @click=${this.chooseFile} @keydown=${this.handleDropAreaKey}>${this.labels.dropArea}</div>
       <input type="file" accept=".csv,.tsv,.txt,text/csv,text/plain" hidden @change=${this.handleFileChange}>
@@ -98,12 +99,14 @@ export class OptionsImportElement extends LitElement {
 
   renderPreview(plan) {
     return html`
+      <div class="form-options-csv-preview">
       <table class="table table-sm">
         <thead><tr><th>${this.labels.columnLabel}</th><th>${this.labels.columnValue}</th><th>${this.labels.columnDefault}</th><th>${this.labels.columnNote}</th></tr></thead>
         <tbody>
           ${plan.preview.map(row => this.renderRow(row))}
         </tbody>
       </table>
+      </div>
     `;
   }
 
