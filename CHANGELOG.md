@@ -16,6 +16,7 @@
 - Paste cells copied from Excel, Google Sheets, LibreOffice or Numbers.
 - Drop or choose a CSV file. Tab, `;` and `,` files work, in UTF-8, UTF-16 or the older Windows encoding.
 - A preview shows every row, and why a row is skipped, before anything changes.
+- One import takes at most 5,000 rows and 5 MB.
 - A switch for a header row.
 - The editor undo button reverts an import in one step.
 - German translation.

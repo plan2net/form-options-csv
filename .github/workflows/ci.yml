@@ -16,14 +16,22 @@ jobs:
       - run: composer install --no-progress
       - run: composer run qa
 
-  unit:
+  frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Build
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - run: npm ci
+      - run: npm run typecheck
       - run: npm test
+      - run: npm run build
+      # The built file is committed, because Composer installs the extension without a Node build.
+      - run: test -z "$(git status --porcelain -- ../Resources/Public/JavaScript)"
 
   end-to-end:
     runs-on: ubuntu-latest

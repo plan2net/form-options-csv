@@ -49,6 +49,8 @@ prototypes:
                 valueRepeated: 'formOptionsCsv.valueRepeated'
                 onlyOneDefault: 'formOptionsCsv.onlyOneDefault'
                 unclosedQuote: 'formOptionsCsv.unclosedQuote'
+                tooManyRows: 'formOptionsCsv.tooManyRows'
+                tooLarge: 'formOptionsCsv.tooLarge'
                 spreadsheetFile: 'formOptionsCsv.spreadsheetFile'
                 unsupportedFile: 'formOptionsCsv.unsupportedFile'
       MultiSelect: *optionsImport

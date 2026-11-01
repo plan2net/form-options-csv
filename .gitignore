@@ -7,5 +7,6 @@
 /public
 /node_modules/
 /package-lock.json
+/Build/node_modules/
 /test-results/
 /playwright-report/

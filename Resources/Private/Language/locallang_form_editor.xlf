@@ -60,6 +60,12 @@
             <trans-unit id="formOptionsCsv.unclosedQuote">
                 <source>Line %d: a quote is not closed</source>
             </trans-unit>
+            <trans-unit id="formOptionsCsv.tooManyRows">
+                <source>Only %d rows can be imported at once.</source>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.tooLarge">
+                <source>This is too much data. Import at most 5 MB at once.</source>
+            </trans-unit>
             <trans-unit id="formOptionsCsv.spreadsheetFile">
                 <source>This is a spreadsheet file. Copy the cells or save the sheet as CSV.</source>
             </trans-unit>

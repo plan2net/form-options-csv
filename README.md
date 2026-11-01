@@ -83,3 +83,4 @@ On a single select or radio button only "Label 1" becomes the default, because o
 * **Defaults on single select and radio button:** only one default is allowed. The first marked row becomes the default and replaces the old one. Later marks are dropped, and the preview says so.
 * **Defaults on multi select and multi checkbox:** every marked row becomes a default, in addition to the existing ones. When replacing, only the marked rows are defaults.
 * **Broken quotes:** if a quote is not closed, nothing is imported and the preview names the line.
+* **Limits:** one import takes at most 5,000 rows and 5 MB.

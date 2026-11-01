@@ -79,6 +79,14 @@
                 <source>Line %d: a quote is not closed</source>
                 <target>Zeile %d: Ein Anführungszeichen ist nicht geschlossen</target>
             </trans-unit>
+            <trans-unit id="formOptionsCsv.tooManyRows">
+                <source>Only %d rows can be imported at once.</source>
+                <target>Es können höchstens %d Zeilen auf einmal importiert werden.</target>
+            </trans-unit>
+            <trans-unit id="formOptionsCsv.tooLarge">
+                <source>This is too much data. Import at most 5 MB at once.</source>
+                <target>Das sind zu viele Daten. Importieren Sie höchstens 5 MB auf einmal.</target>
+            </trans-unit>
             <trans-unit id="formOptionsCsv.spreadsheetFile">
                 <source>This is a spreadsheet file. Copy the cells or save the sheet as CSV.</source>
                 <target>Das ist eine Tabellendatei. Kopieren Sie die Zellen oder speichern Sie die Tabelle als CSV.</target>
